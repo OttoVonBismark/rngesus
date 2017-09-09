@@ -92,6 +92,7 @@ class RNGesus {
 				System.out.println("RNGesus Random Number Generator Main Menu:");
 				System.out.println("  1. Flip a Coin");
 				System.out.println("  2. Roll some Dice");
+				System.out.println("  3. Play a sick-nasty RPG\n");
 				System.out.print("Pick a number, or enter q to exit:");
 				
 				choice = (char) System.in.read();
@@ -100,7 +101,7 @@ class RNGesus {
 					ignore = (char) System.in.read();
 				} while (ignore != '\n');
 				
-			} while (choice < '1' | choice > '2' & choice != 'q');
+			} while (choice < '1' | choice > '3' & choice != 'q');
 			
 			if(choice == 'q') {
 				System.out.println("Goodbye.");
@@ -117,6 +118,9 @@ class RNGesus {
 			case '2':
 				questionnaire("rollDice");
 				break;
+				
+			case '3':
+				rpgesus();
 			}
 			
 		}
@@ -196,5 +200,171 @@ class RNGesus {
 		System.out.println("Total: " + diceSum);
 		System.out.println("We're done here. Returning to menu.\n");
 		menu();
+	}
+	
+	private static void rpgesus() throws IOException{ // AAAADVENTURE TIME!
+		System.out.println("Welcome to RPGesus! Insert Randomized Tagline Here!\n");
+		System.out.println("Let's build your party!");
+		
+		// Please assume the party submission position.
+		PlayerChar p1 = new PlayerChar();
+		PlayerChar p2 = new PlayerChar();
+		PlayerChar p3 = new PlayerChar();
+		PlayerChar p4 = new PlayerChar();
+		
+		p1.charGen();
+		p2.charGen();
+		p3.charGen();
+		p4.charGen();
+		
+		// ADVENTURE START!
+		/* This bit is going to have a ton of randomized text. This could get a bit confusing, so just know that the flow is always <generate enemies> -><scenario> -> <battle>
+		 * More explicitly, it goes:
+		 * GENERATE ENEMIES
+		 * SCENARIO_PART_1... randomize(); [
+		 * 	random part goes here
+		 * ] SCENARIO_PART_B... randomize(); [
+		 *  random part goes here
+		 * ]
+		 * BATTLE
+		 * RESULTS
+		 * 
+		 * Also,
+		 * TODO: Revise this script. Doesn't have to be an oscar winner, but something not generic af would be nice.
+		 */
+		// Generate Scenario 1 Enemies
+		Enemy enemy1A = new Enemy();
+		Enemy enemy1B = new Enemy();
+		Enemy enemy1C = new Enemy();
+		
+		enemy1A.enemyGen("easy");
+		enemy1B.enemyGen("easy");
+		enemy1C.enemyGen("easy");
+		
+		System.out.println("It was a beautiful day when " + p1.name + " decided he and his pals should fuck some shit up.");
+		System.out.println("As it just so happened, " + enemy1A.name + " and THEIR friends were happy to oblige.");
+		System.out.println("BATTLE START!\n");
+		
+		System.out.println(enemy1A.name + "(" + enemy1A.statCurrHealth + "/" + enemy1A.statMaxHealth + "), "
+				+ enemy1B.name + "(" + enemy1B.statCurrHealth + "/" + enemy1B.statMaxHealth + "), and "
+				+ enemy1C.name + "(" + enemy1C.statCurrHealth + "/" + enemy1C.statMaxHealth + ") attack!");
+	}
+}
+
+class PlayerChar {
+	String name = "Player " + playerCount;
+	int statCurrHealth = 20;
+	int statMaxHealth = 20;
+	int statOffense = 1;
+	int statDefense = 1;
+	int statAgility = 1;
+	int statEvade = 1;
+	
+	static int playerCount = 1;
+	
+	public void charGen() throws IOException{
+		Random statGen = new Random();
+		
+		try{
+			System.out.println("Please name Player " + playerCount + " using only letters.");
+			this.name = InputValidator.StringLetterScan();
+			System.out.println("Ok. Player " + playerCount + " shall be called \"" + this.name + "\".");
+			System.out.println("Their stats are as follows...");
+			System.out.println("HP: " + this.statCurrHealth + "/" + this.statMaxHealth);
+			// Let's generate some stats!
+			this.statOffense = statGen.nextInt(9) + 2; // Physical attacking power. Range is from 2 to 10.
+			this.statDefense = statGen.nextInt(9) + 2; // Defensive power. Incoming damage is reduced by at most this number.
+			this.statAgility = statGen.nextInt(10) + 1; // Accuracy. Compared against Evade to determine of hits land or not.
+			this.statEvade = statGen.nextInt(10) + 1; // Evasive capability. Compared against Agility to dodge.
+			System.out.println("Offense: " + this.statOffense);
+			System.out.println("Defense: " + this.statDefense);
+			System.out.println("Agility: " + this.statAgility);
+			System.out.println("Evasion: " + this.statEvade);
+			System.out.println("Go forth and purge the land of beasts!\n");
+			
+			// Now we iterate the player counter to be fancy.
+			playerCount++;
+			if (playerCount == 5){
+				System.out.println("Your party is assembled! Wage war against the forces of darkness!\n");
+			}
+			
+		} catch (IOException nostrings){
+			System.err.println("Nooooo strings! *bweep boop* " + nostrings.getMessage());
+			System.exit(1);
+		}
+		
+	}
+}
+
+class Enemy {
+	String name;
+	int nameGen;
+	int statCurrHealth;
+	int statMaxHealth;
+	int statOffense;
+	int statDefense;
+	int statAgility;
+	int statEvade;
+	
+	public void enemyGen(String difficulty){
+		Random statGen = new Random();
+		Random enemyRandomize = new Random();
+		
+		// Generate an enemy based on difficulty level. Accepted difficulties are Easy, Medium, Hard, Boss and Final Boss
+		switch(difficulty) {
+		case "easy": // EASY BLOCK STARTS HERE!
+			nameGen = enemyRandomize.nextInt(6) + 1; // 1-5
+			switch(nameGen) {
+			case 1:
+				name = "Drunk Goblin";
+				statCurrHealth = 5;
+				statMaxHealth = 5;
+				statOffense = statGen.nextInt(3) + 1; // 1-3
+				statDefense = statGen.nextInt(2);
+				statAgility = statGen.nextInt(4) + 2; // 2-5
+				statEvade = statGen.nextInt(2);
+				break;
+			case 2:
+				name = "A Threatening-looking Rock";
+				statCurrHealth = 2;
+				statMaxHealth = 2;
+				statOffense = statGen.nextInt(2);
+				statDefense = statGen.nextInt(8) + 1; // 1-7
+				statAgility = statGen.nextInt(2);
+				statEvade = 0; // It's a rock. It's not exactly nimble.
+				break;
+			case 3:
+				name = "Emaciated Dog";
+				statCurrHealth = 3;
+				statMaxHealth = 3;
+				statOffense = statGen.nextInt(5) + 1; // 1-4
+				statDefense = statGen.nextInt(2);
+				statAgility = statGen.nextInt(7) + 2; // 2-8
+				statEvade = statGen.nextInt(5) + 2; // 2-6
+				break;
+			case 4:
+				name = "Homeless Boy";
+				statCurrHealth = 4;
+				statMaxHealth = 4;
+				statOffense = statGen.nextInt(4) + 1; // 1-3
+				statDefense = statGen.nextInt(5) + 1; // 1-4
+				statAgility = statGen.nextInt(8) + 1; // 1-7
+				statEvade = statGen.nextInt(10) + 1; // 1-9
+				break;
+			case 5:
+				name = "Disinterested Zombie";
+				statCurrHealth = 8;
+				statMaxHealth = 8;
+				statOffense = statGen.nextInt(6) + 1; // 1-5
+				statDefense = statGen.nextInt(2);
+				statAgility = 1;
+				statEvade = 1;
+				break;
+			}
+			break;
+		default:
+			System.out.println("Code me, please!");
+			break;
+		}
 	}
 }
