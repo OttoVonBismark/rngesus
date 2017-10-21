@@ -15,7 +15,4 @@ diceroll, rolldice, dice (any of these work)	Rolls x number of dice, outputting 
 		Currently debating whether there should be a silent mode for this or not, due to the nature of use cases.
 
 
-Future plans include a silly basic text-based adventure game called RPGesus.
-
-Concerning outside help: Pull requests are unlikely to be considered as this is my personal Java training program, but later down
-the road once I'm completely satisfied with my work, I'll take pull requests as critique/advisement.
+RPGesus base functionality exists in this branch; however, it is a work in progress and is considered feature-incomplete. It is accessible through the main menu.
