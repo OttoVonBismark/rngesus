@@ -178,13 +178,10 @@ class RNGesus {
 		menu();
 	}
 	
-	private static void rollDice(int[] diceVals) throws IOException { // Roll dem bitches.
+	private static void rollDice(int[] diceVals) throws IOException { // Dice Roll method. Two numbers go in (a number of dice to run and how many sides they have) a bunch of numbers come out.
 		Random diceGen = new Random();
 		int diceOut;
 		int diceSum = 0;
-		
-		/* Stuff goes here */
-		
 		
 		System.out.println("Rolling " + diceVals[0] + " dice with " + diceVals[1] + " sides...");
 		
